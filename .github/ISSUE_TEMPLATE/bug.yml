@@ -1,0 +1,19 @@
+name: 不具合
+description: 動かない・おかしい
+labels: ["不具合"]
+body:
+  - type: markdown
+    attributes:
+      value: 氏名・メールアドレス・アカウント情報は書かないでください。この Issue は、誰でも読めます。
+  - type: textarea
+    id: what
+    attributes:
+      label: 何が起きましたか
+      description: どの画面で、何を押したら、どうなったか
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: アプリのバージョンと iPhone の種類
+      placeholder: "例：1.0、iPhone 15、iOS 26"

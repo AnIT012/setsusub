@@ -1,0 +1,14 @@
+name: 要望
+description: こうなると助かる
+labels: ["要望"]
+body:
+  - type: markdown
+    attributes:
+      value: 氏名・メールアドレス・アカウント情報は書かないでください。この Issue は、誰でも読めます。
+  - type: textarea
+    id: want
+    attributes:
+      label: どうなると助かりますか
+      description: どんな場面で困っているかも、書いてもらえると助かります
+    validations:
+      required: true

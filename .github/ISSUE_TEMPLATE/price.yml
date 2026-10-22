@@ -1,0 +1,26 @@
+name: 値段のまちがい
+description: 画面の値段が、公式とちがう
+labels: ["値段"]
+body:
+  - type: markdown
+    attributes:
+      value: 氏名・メールアドレス・アカウント情報は書かないでください。この Issue は、誰でも読めます。
+  - type: input
+    id: service
+    attributes:
+      label: サービス名とプラン
+      placeholder: "例：Spotify の学生プラン"
+    validations:
+      required: true
+  - type: input
+    id: price
+    attributes:
+      label: 正しい値段
+      placeholder: "例：¥580/月"
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: 確かめた公式のページ
+      placeholder: "https://…"
