@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>プランの管理（見本）</title>
+<style>
+:root { --c: #12A05F; --ink: #111; --ink-2: #66665F; --line: #E6E6E1; --bg: #FAFAF8; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, "Hiragino Sans", sans-serif; }
+header { display: flex; align-items: center; gap: 10px; padding: 18px 20px; background: #fff; border-bottom: 1px solid var(--line); }
+header .logo { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #3BE6A0, var(--c)); }
+header b { font-size: 19px; letter-spacing: -.01em; }
+main { padding: 24px 20px 40px; }
+.crumb { font-size: 13px; color: var(--ink-2); }
+h1 { margin: 6px 0 20px; font-size: 26px; }
+.plan { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 18px; }
+.plan small { color: var(--ink-2); font-size: 13px; }
+.plan .name { margin-top: 4px; font-size: 20px; font-weight: 700; }
+.plan .price { margin-top: 2px; font-size: 15px; color: var(--ink-2); }
+.plan .next { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 14px; }
+.btn { display: block; width: 100%; margin-top: 14px; padding: 15px; border: 0; border-radius: 999px; font-size: 16px; font-weight: 700; }
+.change { background: var(--ink); color: #fff; margin-top: 24px; }
+.cancel { background: #fff; color: #D4143C; border: 1.5px solid #F2C4CD; }
+.note { margin-top: 28px; font-size: 12px; color: var(--ink-2); text-align: center; }
+</style>
+</head>
+<body>
+<header><span class="logo"></span><b id="svc">TuneLab</b></header>
+<main>
+  <p class="crumb">アカウント ＞ プラン</p>
+  <h1>プランの管理</h1>
+  <section class="plan">
+    <small>今のプラン</small>
+    <p class="name">スタンダード</p>
+    <p class="price">¥1,080/月</p>
+    <p class="next">次の支払い日：10月25日</p>
+  </section>
+  <button class="btn change" type="button">プランを変更</button>
+  <button class="btn cancel" type="button">プランを解約</button>
+  <p class="note">これはセツサブの紹介用に作った見本のページです。実在のサービスではありません。</p>
+</main>
+<script>
+try { var s = new URLSearchParams(location.search).get('s'); if (s) { document.getElementById('svc').textContent = s.slice(0, 30); } } catch (e) {}
+</script>
+</body>
+</html>
