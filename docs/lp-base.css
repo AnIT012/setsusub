@@ -1,0 +1,134 @@
+/* セツサブ LP 3案の共通部分（色・文字・電話の枠・上下の帯）。各案の形は各 index.html の中 */
+
+:root {
+  --bg: #FAFAF8;
+  --surface: #F0EFEA;
+  --surface-2: #E7E6E0;
+  --ink: #111111;
+  --ink-2: #55554F;
+  --ink-3: #8A8A84;
+  --line: #E2E1DB;
+  --blue: #3693F3;
+  --green: #1ED760;
+  --green-ink: #0F8A43;
+  --orange: #F5A524;
+  --red: #E11D3A;
+  --button-bg: #111111;
+  --button-ink: #FFFFFF;
+  --bezel: #121212;
+  --bezel-edge: #2A2A2A;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E0E0E;
+    --surface: #1A1A1B;
+    --surface-2: #242425;
+    --ink: #F3F3F1;
+    --ink-2: #B2B2AD;
+    --ink-3: #7E7E7A;
+    --line: #2A2A2B;
+    --green-ink: #3DDC79;
+    --button-bg: #F3F3F1;
+    --button-ink: #111111;
+    --bezel: #2B2B2D;
+    --bezel-edge: #3A3A3C;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E0E0E; --surface: #1A1A1B; --surface-2: #242425; --ink: #F3F3F1; --ink-2: #B2B2AD;
+  --ink-3: #7E7E7A; --line: #2A2A2B; --green-ink: #3DDC79; --button-bg: #F3F3F1; --button-ink: #111111;
+  --bezel: #2B2B2D; --bezel-edge: #3A3A3C;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "LINE Seed JP", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  font-size: 16px;
+  line-height: 1.8;
+  overflow-x: hidden;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  line-break: strict;
+}
+img, video { display: block; max-width: 100%; }
+a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+h1, h2, h3 { margin: 0; line-height: 1.35; font-weight: 800; letter-spacing: .01em; }
+p { margin: 0; }
+/* 見出しの改行を語の切れ目で（Chrome / Safari 17.4+）。効かない所は <wbr> と nowrap の span で守る */
+h1, h2, h3, .lead, .pain, .big { text-wrap: balance; word-break: auto-phrase; }
+.nw { white-space: nowrap; }
+
+.wrap { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+
+/* 上の帯 */
+.site-header { padding: 16px 0; }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 18px; }
+.brand img { width: 34px; height: 34px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.site-nav { display: flex; gap: 18px; font-size: 14px; }
+.site-nav a { text-decoration: none; color: var(--ink-2); }
+.site-nav a:hover { color: var(--ink); }
+@media (max-width: 520px) { .site-nav .opt { display: none; } }
+
+/* ボタン */
+.button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 52px; padding: 0 26px; border-radius: 999px;
+  background: var(--button-bg); color: var(--button-ink);
+  font-weight: 800; font-size: 16px; text-decoration: none;
+  transition: transform .12s ease-out;
+}
+.button:hover { color: var(--button-ink); }
+.button:active { transform: scale(.97); }
+.button svg { width: 18px; height: 18px; }
+.cta-note { font-size: 13px; color: var(--ink-2); }
+
+/* 電話の枠：本物の画面写真を CSS で縮めて入れる。状態バーは写真の中の本物 */
+.phone {
+  --w: 300px;
+  position: relative;
+  width: var(--w);
+  max-width: 100%;
+  padding: calc(var(--w) * .032);
+  border-radius: calc(var(--w) * .165);
+  background: var(--bezel);
+  box-shadow: 0 0 0 1px var(--bezel-edge) inset, 0 24px 60px -24px rgba(0,0,0,.35), 0 2px 6px rgba(0,0,0,.12);
+  flex: none;
+}
+.phone .screen {
+  position: relative;
+  overflow: hidden;
+  border-radius: calc(var(--w) * .135);
+  aspect-ratio: 1206 / 2622;
+  background: #000;
+}
+.phone .screen > img, .phone .screen > video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+
+.shot-note { font-size: 12px; color: var(--ink-3); }
+
+/* Plus の印（アプリの Plus の札と同じ4色の縁） */
+.plus-tag {
+  display: inline-block; padding: 0 10px; border-radius: 999px; font-size: .62em; font-weight: 800; line-height: 1.7;
+  border: 2px solid transparent;
+  background: linear-gradient(var(--bg), var(--bg)) padding-box, linear-gradient(90deg, var(--blue), var(--green), var(--orange), var(--red)) border-box;
+  vertical-align: .2em;
+}
+.soon { display: inline-block; font-size: 11px; font-weight: 700; padding: 0 8px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); line-height: 1.8; vertical-align: .15em; margin-left: 6px; }
+
+/* 下の帯 */
+.site-footer { padding: 40px 0 56px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-2); }
+.site-footer nav { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-bottom: 12px; }
+.site-footer a { text-decoration: none; }
+.site-footer a:hover { color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

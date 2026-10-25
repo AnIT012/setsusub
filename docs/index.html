@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>セツサブ - サブスク見直し</title>
+<meta name="description" content="使った回数を1問だけ聞いて、学生プランやファミリープランへの変更と、解約のページまで案内するアプリです。">
+<link rel="icon" href="./img/icon.png">
+<link rel="apple-touch-icon" href="./img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="./lp-base.css">
+<style>
+/* C：大きな数字と輪が主役。面いっぱいの4色の輪、大きな札のカード、4つの段の帯 */
+:root { --tint-blue: #E6F1FE; --tint-green: #E3F9EB; --tint-orange: #FEF3E0; --tint-red: #FDE7EA; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --tint-blue: #0F2133; --tint-green: #0E2618; --tint-orange: #2B2010; --tint-red: #2E1015; } }
+:root[data-theme="dark"] { --tint-blue: #0F2133; --tint-green: #0E2618; --tint-orange: #2B2010; --tint-red: #2E1015; }
+
+/* 面いっぱいの輪 */
+.hero { position: relative; overflow: hidden; padding: 8px 0 0; }
+.hero .wrap { position: relative; z-index: 1; }
+.hero h1 { font-size: clamp(40px, 11.5vw, 92px); line-height: 1.12; letter-spacing: -.02em; }
+.hero .lead { margin-top: 18px; font-size: 17px; color: var(--ink-2); max-width: 30em; }
+.hero .cta { margin-top: 26px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
+.ring-stage { position: relative; height: 680px; margin-top: 12px; }
+.ring-stage svg.ring { position: absolute; left: 50%; top: 50%; width: 640px; height: 640px; transform: translate(-50%, -50%); overflow: visible; }
+.ring-stage .phone { --w: 236px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.ring .arc { fill: none; stroke-width: 34; transform-box: view-box; transform-origin: 100px 100px; transform: rotate(var(--rot)); animation: assemble .95s cubic-bezier(.3,.35,.25,1) both; }
+@keyframes assemble {
+  from { stroke-dasharray: 0 503; transform: rotate(calc(var(--rot) - 150deg)) scale(1.3); }
+}
+.ring-cap { position: absolute; left: 0; right: 0; bottom: 8px; text-align: center; }
+@media (min-width: 960px) {
+  .hero { min-height: 760px; padding-top: 40px; }
+  .hero .wrap { display: grid; grid-template-columns: minmax(0, 560px) 1fr; }
+  .hero-text { padding-top: 72px; max-width: 520px; }
+  .ring-stage { position: absolute; right: -230px; top: -6px; width: 900px; height: 860px; margin: 0; z-index: 0; }
+  .ring-stage svg.ring { width: 860px; height: 860px; }
+  .ring-stage .phone { --w: 300px; }
+  .ring-cap { bottom: 24px; }
+}
+
+/* 大きな数字の札 */
+.numbers { padding: 72px 0 24px; }
+.numbers h2, .sec-title { font-size: clamp(26px, 6.4vw, 44px); }
+.sec-lead { margin-top: 12px; color: var(--ink-2); max-width: 36em; }
+.num-grid { margin-top: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.num { padding: 20px 18px; border-radius: 22px; background: var(--surface); }
+.num b { display: block; white-space: nowrap; font-size: clamp(40px, 11vw, 64px); font-weight: 800; line-height: 1.05; letter-spacing: -.02em; color: var(--c, var(--ink)); }
+.num b small { font-size: .42em; letter-spacing: 0; margin-left: 2px; }
+.num span { display: block; margin-top: 8px; font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+.num.wide { grid-column: 1 / -1; }
+@media (min-width: 960px) { .num-grid { grid-template-columns: repeat(5, 1fr); } .num.wide { grid-column: auto; } .num b { font-size: 52px; } }
+
+/* 大きなカード */
+.cards { padding: 56px 0; display: grid; gap: 14px; }
+.card { border-radius: 30px; background: var(--tint, var(--surface)); padding: 28px 20px 0; overflow: hidden; display: grid; gap: 24px; }
+.card .label { font-size: 13px; font-weight: 800; color: var(--c, var(--ink-2)); }
+.card h3 { margin-top: 6px; font-size: clamp(24px, 6vw, 34px); }
+.card h3 .plus-tag { font-size: 13px; vertical-align: .3em; background: linear-gradient(var(--tint), var(--tint)) padding-box, linear-gradient(90deg, var(--blue), var(--green), var(--orange), var(--red)) border-box; }
+.card p { margin-top: 12px; color: var(--ink-2); }
+.card .shot { display: flex; justify-content: center; align-items: flex-end; }
+/* 電話は下の端で切って、カードからはみ出させない（画面の上半分を見せる） */
+.card .phone { --w: 250px; margin-bottom: -150px; }
+.card.blue { --tint: var(--tint-blue); --c: var(--blue); }
+.card.green { --tint: var(--tint-green); --c: var(--green-ink); }
+.card.orange { --tint: var(--tint-orange); --c: #B26A00; }
+.card.red { --tint: var(--tint-red); --c: var(--red); }
+.card.ink { --tint: var(--surface); --c: var(--ink); }
+/* Plus の機能（予算で組み直す）は、アプリの Plus のカードと同じ4色を薄く流す（ほかのカードと色を重ねない） */
+.card.plus { --tint: var(--surface); --c: var(--ink);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--blue) 16%, var(--surface)), color-mix(in srgb, var(--green) 14%, var(--surface)) 40%, color-mix(in srgb, var(--orange) 12%, var(--surface)) 70%, color-mix(in srgb, var(--red) 10%, var(--surface))); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .card.orange { --c: var(--orange); } }
+@media (min-width: 960px) {
+  .cards { grid-template-columns: repeat(6, 1fr); gap: 16px; }
+  .card { padding: 40px 40px 0; grid-template-columns: 1fr; }
+  .card.span-4 { grid-column: span 4; grid-template-columns: 1fr auto; align-items: end; }
+  .card.span-2 { grid-column: span 2; }
+  .card.span-2 h3 { font-size: 26px; }
+  .card.span-3 { grid-column: span 3; }
+  .card.span-4 .text { align-self: center; padding-bottom: 40px; }
+  .card .phone { --w: 270px; }
+}
+.cards-note { margin-top: -36px; padding-bottom: 40px; }
+
+/* 4つの段の帯 */
+.flow { padding: 64px 0; }
+.flow ol { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 24px 12px; counter-reset: f; }
+.flow li { counter-increment: f; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; position: relative; }
+.flow li .phone { --w: 150px; }
+.flow li h3 { font-size: 17px; display: flex; align-items: center; gap: 8px; }
+.flow li h3::before { content: counter(f); width: 26px; height: 26px; border-radius: 50%; background: var(--c); color: #fff; display: grid; place-items: center; font-size: 13px; }
+.flow li p { font-size: 14px; color: var(--ink-2); line-height: 1.6; max-width: 15em; }
+.flow li:nth-child(1) { --c: var(--blue); }
+.flow li:nth-child(2) { --c: var(--green-ink); }
+.flow li:nth-child(3) { --c: var(--red); }
+.flow li:nth-child(4) { --c: #B26A00; }
+@media (min-width: 960px) {
+  .flow ol { grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .flow li .phone { --w: 210px; }
+  .flow li:not(:last-child)::after { content: ""; position: absolute; top: 210px; right: -18px; width: 12px; height: 12px; border-top: 2px solid var(--ink-3); border-right: 2px solid var(--ink-3); transform: rotate(45deg); }
+}
+
+/* ダークモード */
+.dark { padding: 56px 0; display: grid; gap: 28px; align-items: center; }
+.dark .pair { display: flex; justify-content: center; gap: 14px; }
+.dark .pair .phone { --w: 165px; }
+@media (min-width: 960px) { .dark { grid-template-columns: 1fr auto; gap: 64px; } .dark .pair .phone { --w: 230px; } }
+
+/* Plus とデータ */
+.plus-data { padding: 40px 0 0; display: grid; gap: 14px; }
+.box { border-radius: 30px; padding: 28px 20px; background: var(--surface); }
+.box.plus { background: var(--ink); color: var(--bg); }
+.box.plus .plus-tag { background: linear-gradient(var(--ink), var(--ink)) padding-box, linear-gradient(90deg, var(--blue), var(--green), var(--orange), var(--red)) border-box; color: var(--bg); }
+.box h2 { font-size: clamp(24px, 6vw, 34px); }
+.box .big-price { margin-top: 10px; font-size: clamp(56px, 16vw, 88px); font-weight: 800; line-height: 1; letter-spacing: -.02em; }
+.box .big-price small { font-size: 18px; letter-spacing: 0; margin-left: 8px; }
+.box > p { margin-top: 12px; opacity: .78; }
+.box ul { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 12px; }
+.box li b { display: block; }
+.box li span { opacity: .72; font-size: 15px; }
+.box.plus .soon { background: rgba(255,255,255,.14); color: inherit; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .box.plus .soon { background: rgba(0,0,0,.1); } }
+@media (min-width: 960px) { .plus-data { gap: 16px; } .box { padding: 44px; } .box ul { grid-template-columns: repeat(3, 1fr); gap: 18px 24px; } }
+
+.final { position: relative; overflow: hidden; text-align: center; padding: 120px 0; }
+.final svg { position: absolute; left: 50%; top: 50%; width: 520px; height: 520px; transform: translate(-50%, -50%); opacity: .16; }
+.final h2 { position: relative; font-size: clamp(30px, 8vw, 56px); }
+.final p { position: relative; margin: 14px auto 0; color: var(--ink-2); max-width: 30em; }
+.final .cta { position: relative; margin-top: 28px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+
+/* Plus：面いっぱいの黒地に、アプリの4色の輪がゆっくり回る光。機能は本物の画面つき */
+.plus-hero { position: relative; overflow: hidden; border-radius: 34px; background: #0D0E0D; color: #F6F6F3; padding: 44px 20px 24px; isolation: isolate; grid-column: 1 / -1; }
+.plus-glow { position: absolute; left: 50%; top: -260px; width: 900px; height: 900px; margin-left: -450px; z-index: -1; filter: blur(80px); opacity: .45;
+  background: conic-gradient(from 0deg, var(--blue), var(--green), var(--orange), var(--red), var(--blue));
+  border-radius: 50%; animation: plus-spin 18s linear infinite; }
+@keyframes plus-spin { to { transform: rotate(1turn); } }
+@media (prefers-reduced-motion: reduce) { .plus-glow { animation: none; } }
+.plus-head { text-align: center; }
+.plus-kicker { font-size: 14px; font-weight: 800; opacity: .8; }
+.plus-hero h2 { margin-top: 8px; font-size: clamp(30px, 8vw, 46px); }
+.plus-hero .plus-tag { font-size: .42em; vertical-align: .35em; padding: 3px 12px; border: 2px solid transparent; border-radius: 999px;
+  background: linear-gradient(#0D0E0D, #0D0E0D) padding-box, linear-gradient(90deg, var(--blue), var(--green), var(--orange), var(--red)) border-box; }
+.plus-price { margin-top: 6px; font-size: clamp(72px, 22vw, 128px); font-weight: 800; line-height: 1; letter-spacing: -.03em;
+  background: linear-gradient(90deg, #8EC5FF, #7CF0A8, #FFD27A, #FF8A9B); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.plus-price small { font-size: 18px; letter-spacing: 0; margin-left: 10px; color: #F6F6F3; -webkit-text-fill-color: #F6F6F3; }
+.plus-lead { margin: 14px auto 0; max-width: 32em; opacity: .78; }
+.plus-grid { margin-top: 32px; display: grid; gap: 12px; }
+.pf { background: rgba(255,255,255,.06); border-radius: 24px; padding: 20px 18px 0; display: grid; gap: 16px; overflow: hidden; max-height: 470px; }
+.pf-text b { display: block; font-size: 19px; }
+.pf-text span { display: block; margin-top: 6px; font-size: 14px; opacity: .74; }
+.pf-shot { display: flex; justify-content: center; }
+.pf-shot img { width: 210px; height: auto; display: block; border-radius: 28px 28px 0 0; margin-bottom: -150px; box-shadow: 0 -6px 30px rgba(0,0,0,.35); }
+.pf-small { list-style: none; margin: 0; padding: 18px; display: grid; gap: 14px; background: rgba(255,255,255,.07); border-radius: 24px; }
+.pf-small b { display: block; font-size: 16px; }
+.pf-small em { font-style: normal; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 999px; background: rgba(255,255,255,.14); margin-left: 4px; vertical-align: .15em; }
+.pf-small span { font-size: 14px; opacity: .72; }
+@media (min-width: 960px) {
+  .plus-hero { padding: 64px 48px 32px; }
+  .plus-grid { grid-template-columns: 1fr 1fr; }
+  .pf.wide { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; align-items: center; padding-bottom: 0; }
+  .pf.wide .pf-shot img { width: 240px; margin-bottom: -200px; }
+  .pf { max-height: 520px; }
+  .pf-small { grid-column: 1 / -1; grid-template-columns: repeat(3, 1fr); }
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./index.html"><img src="./img/icon.png" alt="">セツサブ</a>
+    <nav class="site-nav" aria-label="サイト内">
+      <a href="./support.html">お問い合わせ</a>
+      <a class="opt" href="./privacy.html">プライバシー</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-text">
+        <h1>払う前の、<br><span class="nw">サブスク</span><wbr><span class="nw">見直し</span></h1>
+        <p class="lead">使った回数を1問だけ聞いて、学生プラン・ファミリープラン・安いプランへの変更と、解約のページまで案内します。</p>
+        <div class="cta">
+          <!-- TODO: App Store の URL が決まったら href を差し替える -->
+          <a class="button" href="#">App Store で入手</a>
+          <span class="cta-note">iPhone 向け・無料（広告あり）</span>
+        </div>
+      </div>
+    </div>
+    <div class="ring-stage">
+      <!-- アプリの輪のマークと同じ4色。読み込んだ瞬間に、ばらばらの4本が1つの輪に集まる（0.95秒） -->
+      <svg class="ring" viewBox="0 0 200 200" aria-hidden="true">
+        <circle class="arc" cx="100" cy="100" r="80" stroke="var(--blue)"   style="--rot: -88deg" stroke-dasharray="118 503"/>
+        <circle class="arc" cx="100" cy="100" r="80" stroke="var(--green)"  style="--rot: 2deg" stroke-dasharray="118 503"/>
+        <circle class="arc" cx="100" cy="100" r="80" stroke="var(--orange)" style="--rot: 92deg" stroke-dasharray="118 503"/>
+        <circle class="arc" cx="100" cy="100" r="80" stroke="var(--red)"    style="--rot: 182deg" stroke-dasharray="118 503"/>
+      </svg>
+      <div class="phone"><div class="screen">
+        <video data-auto autoplay muted loop playsinline preload="auto" poster="./video/launch.jpg" aria-label="起動の画面の録画。4色の帯が輪になり、マイサブスクに移る"><source src="./video/launch.mp4" type="video/mp4"></video>
+      </div></div>
+    </div>
+  </section>
+
+  <div class="wrap">
+
+    <section class="cards" aria-label="できること">
+      <article class="card blue span-4">
+        <div class="text">
+          <p class="label">引き落とし前の1問</p>
+          <h3>使った回数からの提案</h3>
+          <p>引き落としが近いサブスクについて「この1か月に使った回数は？」と聞きます。押して答えると、カードがその場で提案に変わります。録画では TuneLab に「0回」と答え、学生プランへの変更を提案されています。</p>
+        </div>
+        <div class="shot"><div class="phone"><div class="screen"><video data-auto muted loop playsinline preload="metadata" poster="./video/answer.jpg" aria-label="TuneLab の使った回数に0回と答え、学生プランの提案が出て、詳細へ進む録画"><source src="./video/answer.mp4" type="video/mp4"></video></div></div></div>
+      </article>
+      <article class="card green span-2">
+        <div class="text">
+          <p class="label">公式の値段つき</p>
+          <h3>プランを一括で確認</h3>
+          <p>サービスごとのプランを、公式で確かめた日つきで並べます。</p>
+        </div>
+        <div class="shot"><div class="phone"><div class="screen"><img src="./img/app/plans.jpg" alt="TuneLab のプランを選ぶ画面。スタンダード・学生・ファミリーの値段" loading="lazy" width="750" height="1630"></div></div></div>
+      </article>
+      <article class="card red span-2">
+        <div class="text">
+          <p class="label">入った場所ごと</p>
+          <h3>解約のページへ直行</h3>
+          <p>入った場所を選ぶと、その場所の解約・変更のページを開きます。</p>
+        </div>
+        <div class="shot"><div class="phone"><div class="screen"><img src="./img/app/cancel-where.jpg" alt="「どこから加入しましたか？」と入った場所を選ぶ画面" loading="lazy" width="750" height="1630"></div></div></div>
+      </article>
+      <article class="card plus span-4">
+        <div class="text">
+          <p class="label">お気に入りは残したまま</p>
+          <h3>予算で組み直す <span class="plus-tag">Plus</span></h3>
+          <p>毎月の予算をつまみで決めると、予算内に収まる組み合わせをその場で出します。ピンを押したサブスクは「残すサブスク」に入り、組み直しで外れることはありません。</p>
+        </div>
+        <div class="shot"><div class="phone"><div class="screen"><video data-auto muted loop playsinline preload="metadata" poster="./video/rebuild.jpg" aria-label="予算で組み直す画面で、Lumo AI のピンを押して残すサブスクに入れる録画"><source src="./video/rebuild.mp4" type="video/mp4"></video></div></div></div>
+      </article>
+      <article class="card ink span-3">
+        <div class="text">
+          <p class="label">約150のサービス</p>
+          <h3>ロゴを押すだけの登録</h3>
+          <p>ロゴを押して、プランを選ぶだけで登録が済みます。一覧にないサービスは、手で登録できます。</p>
+        </div>
+        <div class="shot"><div class="phone"><div class="screen"><img src="./img/app/logos.jpg" alt="ロゴを並べたサブスクを選ぶ画面" loading="lazy" width="750" height="1630"></div></div></div>
+      </article>
+      <article class="card orange span-3">
+        <div class="text">
+          <p class="label">終わる前に</p>
+          <h3>無料体験のカード</h3>
+          <p>無料体験が終わる日が近づくと、マイサブスクの一番上にカードを出します。続けるか解約するかを、その場で選べます。</p>
+        </div>
+        <div class="shot"><div class="phone"><div class="screen"><img src="./img/app/trialsoon.jpg" alt="FitNest の無料体験があと2日で終わると知らせるカード" loading="lazy" width="750" height="1630"></div></div></div>
+      </article>
+    </section>
+    <p class="shot-note cards-note">画面はシミュレーターで撮った本物です。金額は見本のデータです。</p>
+
+    <section class="flow" aria-labelledby="flow-title">
+      <h2 class="sec-title" id="flow-title">見直しの流れ</h2>
+      <p class="sec-lead">いくら払っているかを並べた後の、次の一手までを1つのアプリで進めます。</p>
+      <ol>
+        <li><div class="phone"><div class="screen"><img src="./img/app/home.jpg" alt="マイサブスクの、使った回数を聞くカード" loading="lazy" width="750" height="1630"></div></div><h3>答える</h3><p>マイサブスクのカードで、使った回数を押して答えます</p></li>
+        <li><div class="phone"><div class="screen"><img src="./img/app/spotify-review.jpg" alt="TuneLab の詳細の見直す。安いプラン・ファミリープラン・解約" loading="lazy" width="750" height="1630"></div></div><h3>提案</h3><p>安いプラン・ファミリープラン・解約を、差額つきで並べます</p></li>
+        <li><div class="phone"><div class="screen"><img src="./img/app/cancel-where.jpg" alt="入った場所を選ぶ画面" loading="lazy" width="750" height="1630"></div></div><h3>解約ページ</h3><p>入った場所を選ぶと、解約・変更のページを開きます</p></li>
+        <li><div class="phone"><div class="screen"><img src="./img/app/record.jpg" alt="記録の画面" loading="lazy" width="750" height="1630"></div></div><h3>記録</h3><p>先月から減った金額と、見直した履歴が残ります</p></li>
+      </ol>
+    </section>
+
+    <div class="plus-data">
+      <section class="plus-hero" aria-labelledby="plus-title">
+        <div class="plus-glow" aria-hidden="true"></div>
+        <div class="plus-head">
+          <p class="plus-kicker">買い切りの有料版</p>
+          <h2 id="plus-title">セツサブ <span class="plus-tag">Plus</span></h2>
+          <p class="plus-price">¥980<small>買い切り</small></p>
+          <p class="plus-lead">1回払えば、ずっと使えます。質問・提案・解約のページ・記録は、Plus なしでも使えます。</p>
+        </div>
+        <div class="plus-grid">
+          <article class="pf wide">
+            <div class="pf-text"><b>予算で組み直す</b><span>月の予算を決めると、残したいサブスクは外さずに、予算内に収まる組み合わせを提案します</span></div>
+            <div class="pf-shot"><img src="./img/app/rebuild-pinned.jpg" alt="予算で組み直す画面。残すサブスクと予算のつまみ" loading="lazy" width="750" height="1630"></div>
+          </article>
+          <article class="pf">
+            <div class="pf-text"><b>値上げのお知らせ</b><span>公式の値段が変わると通知して、登録した値段も合わせます</span></div>
+            <div class="pf-shot"><img src="./img/app/pricehistory.jpg" alt="値段の変更の一覧" loading="lazy" width="750" height="1630"></div>
+          </article>
+          <article class="pf">
+            <div class="pf-text"><b>解約日の予約</b><span>決めた解約日の前日に通知して、当日に解約できたかを確かめます</span></div>
+            <div class="pf-shot"><img src="./img/app/cancelplan.jpg" alt="解約の予定の設定" loading="lazy" width="750" height="1630"></div>
+          </article>
+          <ul class="pf-small">
+            <li><b>広告なし</b><span>アプリの中の広告が出なくなります</span></li>
+            <li><b>アイコンと色</b><span>アプリのアイコン8種類と画面の色を選べます</span></li>
+            <li><b>クラウド保存 <em>準備中</em></b><span>機種変更してもデータが残ります</span></li>
+          </ul>
+        </div>
+      </section>
+      <section class="box" aria-labelledby="data-title">
+        <h2 id="data-title">データの扱い</h2>
+        <p>登録した内容は、お使いの端末に保存します。詳しくは<a href="./privacy.html">プライバシーポリシー</a>をご覧ください。</p>
+        <ul>
+          <li><b>端末に保存</b><span>ログインせずに、すぐ使えます</span></li>
+          <li><b>銀行やカード</b><span>つなぎません。金額と日付は自分で登録した物を使います</span></li>
+          <li><b>公式の値段</b><span>公式のページで確かめた日つきで入れています</span></li>
+          <li><b>バックアップ</b><span>データの書き出しと復元、CSV の書き出しができます</span></li>
+          <li><b>Face ID のロック</b><span>開く時に Face ID を求めるように設定できます</span></li>
+          <li><b>ウィジェット</b><span>ホーム画面に置けます</span></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <section class="final">
+    <svg viewBox="0 0 200 200" aria-hidden="true">
+      <circle cx="100" cy="100" r="80" fill="none" stroke-width="34" stroke="var(--blue)" stroke-dasharray="118 503" transform="rotate(-88 100 100)"/>
+      <circle cx="100" cy="100" r="80" fill="none" stroke-width="34" stroke="var(--green)" stroke-dasharray="118 503" transform="rotate(2 100 100)"/>
+      <circle cx="100" cy="100" r="80" fill="none" stroke-width="34" stroke="var(--orange)" stroke-dasharray="118 503" transform="rotate(92 100 100)"/>
+      <circle cx="100" cy="100" r="80" fill="none" stroke-width="34" stroke="var(--red)" stroke-dasharray="118 503" transform="rotate(182 100 100)"/>
+    </svg>
+    <div class="wrap">
+      <h2>次の引き落としの前に</h2>
+      <p>1問に答えるところから始められます。登録はロゴを押すだけです。</p>
+      <div class="cta">
+        <!-- TODO: App Store の URL が決まったら href を差し替える -->
+        <a class="button" href="#">App Store で入手</a>
+        <span class="cta-note">iPhone 向け・無料（広告あり）・Plus は買い切り ¥980</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav aria-label="サイトの案内">
+      <a href="./support.html">お問い合わせ・よくある質問</a>
+      <a href="./privacy.html">プライバシーポリシー</a>
+      <a href="./terms.html">利用規約</a>
+      <a href="./referral.html">紹介リンクについて</a>
+    </nav>
+    <p>セツサブ　運営：AnIT</p>
+  </div>
+</footer>
+<script src="./lp-video.js"></script>
+</body>
+</html>

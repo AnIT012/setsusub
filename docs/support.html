@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>お問い合わせ - セツサブ</title>
+<meta name="description" content="セツサブへのお問い合わせと、よくある質問">
+<link rel="icon" href="img/icon.png">
+<link rel="apple-touch-icon" href="img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LINE+Seed+JP:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="img/icon.png" alt="">セツサブ</a>
+    <nav class="site-nav" aria-label="サイト内">
+      <a href="index.html">アプリについて</a>
+      <a href="support.html" aria-current="page">お問い合わせ</a>
+      <a href="privacy.html">プライバシー</a>
+    </nav>
+  </div>
+</header>
+
+<main class="doc">
+  <div class="wrap narrow">
+    <h1>お問い合わせ</h1>
+    <p class="meta">不具合、ご要望、ご質問はこちらから</p>
+
+    <div class="contact">
+      <p>公開の GitHub の Issue でお寄せください。アプリの「設定」→「お問い合わせ」からも開けます。</p>
+      <p>Issue は誰でも読めます。個人の情報（氏名、メールアドレス、カード番号など）は書かないでください。</p>
+      <a class="button" href="https://github.com/AnIT012/setsusub/issues/new/choose">GitHub で問い合わせる</a>
+    </div>
+    <!-- TODO: メールでも受け付ける場合は、ここに「メール：support@example.com」の行を足す（アプリの ContactInfo.swift と合わせる） -->
+
+    <h2>よくある質問</h2>
+    <div class="faq">
+      <details>
+        <summary>データはどこに保存されますか？</summary>
+        <p>登録した内容は、お使いの iPhone の中に保存します。銀行やカードとはつながず、運営者のサーバーにも送りません。アプリを削除すると、データも消えます。</p>
+      </details>
+      <details>
+        <summary>機種変更のとき、データを移せますか？</summary>
+        <p>前の iPhone で「設定」→「バックアップを書き出す」でファイルに控え、新しい iPhone で「設定」→「バックアップから復元」を選ぶと移せます。Plus のクラウド保存は準備中です。</p>
+      </details>
+      <details>
+        <summary>Plus を買い直さずに、新しい iPhone で使えますか？</summary>
+        <p>購入したときと同じ Apple アカウントでログインし、セツサブ Plus の画面で「購入を復元」を押してください。もう一度お支払いいただく必要はありません。</p>
+      </details>
+      <details>
+        <summary>解約はどこからできますか？</summary>
+        <p>サービスの詳細の画面で「解約する」を押すと、App Store・Google Play・キャリア・公式サイトなど、入った場所ごとの解約ページを開きます。解約そのものは、開いたページで行ってください。本アプリが代わりに解約することはありません。</p>
+      </details>
+      <details>
+        <summary>通知が届きません</summary>
+        <p>iPhone の「設定」→「通知」→「セツサブ」で、通知が許可されているかを確かめてください。集中モードの間は届かないことがあります。通知のタイミングは、アプリの「設定」で変えられます。</p>
+      </details>
+      <details>
+        <summary>表示された値段が、実際の請求と違います</summary>
+        <p>表示する値段は、各サービスの公式ページを確認した日の情報です。確認した日は、プランを選ぶ画面に表示しています。ドルの値段は 1ドル＝150円で換算した概算で、為替や税で変わります。登録した値段は、サービスの詳細の画面から直せます。公式の値段が変わっていることに気づいたら、お問い合わせから教えてください。</p>
+      </details>
+      <details>
+        <summary>広告を消せますか？</summary>
+        <p>セツサブ Plus（買い切り）を購入すると、広告は表示されません。</p>
+      </details>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <nav aria-label="サイトの案内">
+      <a href="support.html">お問い合わせ・よくある質問</a>
+      <a href="privacy.html">プライバシーポリシー</a>
+      <a href="terms.html">利用規約</a>
+      <a href="referral.html">紹介リンクについて</a>
+    </nav>
+    <p>セツサブ　運営：AnIT</p>
+  </div>
+</footer>
+</body>
+</html>
