@@ -61,8 +61,7 @@
 .card h3 .plus-tag { font-size: 13px; vertical-align: .3em; background: linear-gradient(var(--tint), var(--tint)) padding-box, linear-gradient(90deg, var(--blue), var(--green), var(--orange), var(--red)) border-box; }
 .card p { margin-top: 12px; color: var(--ink-2); }
 .card .shot { display: flex; justify-content: center; align-items: flex-end; }
-/* 電話は下の端で切って、カードからはみ出させない（画面の上半分を見せる） */
-.card .phone { --w: 250px; margin-bottom: -150px; }
+.card .phone { --w: 250px; }
 .card.blue { --tint: var(--tint-blue); --c: var(--blue); }
 .card.green { --tint: var(--tint-green); --c: var(--green-ink); }
 .card.orange { --tint: var(--tint-orange); --c: #B26A00; }
@@ -83,23 +82,43 @@
   .card .phone { --w: 270px; }
 }
 .cards-note { margin-top: -36px; padding-bottom: 40px; }
+/* スマホは丸ごと見せる（下を切ると欠けて見える。2026-10-25 本人・お父さん） */
+.card { padding-bottom: 28px; }
+.card .phone { --w: 210px; margin-bottom: 0; }
+@media (min-width: 960px) { .card { padding-bottom: 40px; } .card .phone { --w: 240px; } }
 
-/* 4つの段の帯 */
+/* 見直しの流れ：スマホは縦の1本道。大きい番号を、アプリの4色で塗り分けた線でつなぐ（線はスクロールに合わせて伸びる） */
 .flow { padding: 64px 0; }
-.flow ol { list-style: none; margin: 32px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 24px 12px; counter-reset: f; }
-.flow li { counter-increment: f; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; position: relative; }
-.flow li .phone { --w: 150px; }
-.flow li h3 { font-size: 17px; display: flex; align-items: center; gap: 8px; }
-.flow li h3::before { content: counter(f); width: 26px; height: 26px; border-radius: 50%; background: var(--c); color: #fff; display: grid; place-items: center; font-size: 13px; }
-.flow li p { font-size: 14px; color: var(--ink-2); line-height: 1.6; max-width: 15em; }
+.flow ol { list-style: none; margin: 36px 0 0; padding: 0; position: relative; display: grid; gap: 40px; }
+.flow ol::before, .flow ol::after { content: ""; position: absolute; left: 27px; top: 28px; bottom: 28px; width: 4px; border-radius: 2px; }
+.flow ol::before { background: var(--surface-2); }
+.flow ol::after { background: linear-gradient(var(--blue), var(--green) 33%, var(--red) 67%, var(--orange)); }
+@supports (animation-timeline: view()) {
+  .flow ol::after { animation: flow-line linear both; animation-timeline: view(); animation-range: entry 40% cover 70%; }
+  @keyframes flow-line { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+}
+.flow li { position: relative; z-index: 1; display: grid; grid-template-columns: 58px 1fr; gap: 0 16px; align-items: start; }
+.flow .step-num { width: 58px; height: 58px; border-radius: 50%; background: var(--c); color: #fff; display: grid; place-items: center; font-size: 28px; font-weight: 800; line-height: 1; box-shadow: 0 0 0 6px var(--bg); }
+.flow .step-body { padding-top: 6px; }
+.flow li h3 { font-size: 22px; color: var(--c); }
+.flow li p { margin-top: 6px; font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+.flow li .phone { --w: 200px; grid-column: 2; margin-top: 16px; }
 .flow li:nth-child(1) { --c: var(--blue); }
 .flow li:nth-child(2) { --c: var(--green-ink); }
 .flow li:nth-child(3) { --c: var(--red); }
 .flow li:nth-child(4) { --c: #B26A00; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .flow li:nth-child(4) { --c: var(--orange); } }
+:root[data-theme="dark"] .flow li:nth-child(4) { --c: var(--orange); }
+/* PC は横の1本道。番号の列を同じ4色の線で横につなぐ */
 @media (min-width: 960px) {
-  .flow ol { grid-template-columns: repeat(4, 1fr); gap: 24px; }
-  .flow li .phone { --w: 210px; }
-  .flow li:not(:last-child)::after { content: ""; position: absolute; top: 210px; right: -18px; width: 12px; height: 12px; border-top: 2px solid var(--ink-3); border-right: 2px solid var(--ink-3); transform: rotate(45deg); }
+  .flow ol { grid-template-columns: repeat(4, 1fr); gap: 28px; }
+  .flow ol::before, .flow ol::after { left: 12.5%; right: 12.5%; top: 27px; bottom: auto; width: auto; height: 4px; }
+  .flow ol::after { background: linear-gradient(90deg, var(--blue), var(--green) 33%, var(--red) 67%, var(--orange)); }
+  @supports (animation-timeline: view()) { @keyframes flow-line { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } } }
+  .flow li { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 16px; }
+  .flow .step-body { padding-top: 0; }
+  .flow li p { max-width: 15em; }
+  .flow li .phone { --w: 210px; grid-column: auto; margin-top: 0; }
 }
 
 /* ダークモード */
@@ -147,11 +166,11 @@
 .plus-price small { font-size: 18px; letter-spacing: 0; margin-left: 10px; color: #F6F6F3; -webkit-text-fill-color: #F6F6F3; }
 .plus-lead { margin: 14px auto 0; max-width: 32em; opacity: .78; }
 .plus-grid { margin-top: 32px; display: grid; gap: 12px; }
-.pf { background: rgba(255,255,255,.06); border-radius: 24px; padding: 20px 18px 0; display: grid; gap: 16px; overflow: hidden; max-height: 470px; }
+.pf { background: rgba(255,255,255,.06); border-radius: 24px; padding: 20px 18px 20px; display: grid; gap: 16px; overflow: hidden; }
 .pf-text b { display: block; font-size: 19px; }
 .pf-text span { display: block; margin-top: 6px; font-size: 14px; opacity: .74; }
 .pf-shot { display: flex; justify-content: center; }
-.pf-shot img { width: 210px; height: auto; display: block; border-radius: 28px 28px 0 0; margin-bottom: -150px; box-shadow: 0 -6px 30px rgba(0,0,0,.35); }
+.pf-shot .phone { --w: 210px; --bezel: #3A3A3D; --bezel-edge: rgba(255,255,255,.32); }
 .pf-small { list-style: none; margin: 0; padding: 18px; display: grid; gap: 14px; background: rgba(255,255,255,.07); border-radius: 24px; }
 .pf-small b { display: block; font-size: 16px; }
 .pf-small em { font-style: normal; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 999px; background: rgba(255,255,255,.14); margin-left: 4px; vertical-align: .15em; }
@@ -159,9 +178,9 @@
 @media (min-width: 960px) {
   .plus-hero { padding: 64px 48px 32px; }
   .plus-grid { grid-template-columns: 1fr 1fr; }
-  .pf.wide { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; align-items: center; padding-bottom: 0; }
-  .pf.wide .pf-shot img { width: 240px; margin-bottom: -200px; }
-  .pf { max-height: 520px; }
+  .pf.wide { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; align-items: center; padding-bottom: 20px; }
+  .pf.wide .pf-shot .phone { --w: 240px; }
+
   .pf-small { grid-column: 1 / -1; grid-template-columns: repeat(3, 1fr); }
 }
 
@@ -214,7 +233,7 @@
         <div class="text">
           <p class="label">引き落とし前の1問</p>
           <h3>使った回数からの提案</h3>
-          <p>引き落としが近いサブスクについて「この1か月に使った回数は？」と聞きます。押して答えると、カードがその場で提案に変わります。録画では TuneLab に「0回」と答え、学生プランへの変更を提案されています。</p>
+          <p>引き落とし日の前に、今月の利用回数を確認します。回数を選ぶと、そのサブスクに合った見直し案が表示されます。</p>
         </div>
         <div class="shot"><div class="phone"><div class="screen"><video data-auto muted loop playsinline preload="metadata" poster="./video/answer.jpg" aria-label="TuneLab の使った回数に0回と答え、学生プランの提案が出て、詳細へ進む録画"><source src="./video/answer.mp4" type="video/mp4"></video></div></div></div>
       </article>
@@ -222,7 +241,7 @@
         <div class="text">
           <p class="label">公式の値段つき</p>
           <h3>プランを一括で確認</h3>
-          <p>サービスごとのプランと値段を、一覧で見渡せます。値段は公式のページで確かめた物です。</p>
+          <p>サービスごとのプランや値段を、一覧でチェックできます。値段は各社の公式ページをもとにしています。</p>
         </div>
         <div class="shot"><div class="phone"><div class="screen"><img src="./img/app/plans.jpg" alt="TuneLab のプランを選ぶ画面。スタンダード・学生・ファミリーの値段" loading="lazy" width="750" height="1630"></div></div></div>
       </article>
@@ -265,10 +284,10 @@
       <h2 class="sec-title" id="flow-title">見直しの流れ</h2>
       <p class="sec-lead">いくら払っているかを並べた後の、次の一手までを1つのアプリで進めます。</p>
       <ol>
-        <li><div class="phone"><div class="screen"><img src="./img/app/home.jpg" alt="マイサブスクの、使った回数を聞くカード" loading="lazy" width="750" height="1630"></div></div><h3>答える</h3><p>マイサブスクのカードで、使った回数を押して答えます</p></li>
-        <li><div class="phone"><div class="screen"><img src="./img/app/spotify-review.jpg" alt="TuneLab の詳細の見直す。安いプラン・ファミリープラン・解約" loading="lazy" width="750" height="1630"></div></div><h3>提案</h3><p>他のプランや解約が、差額付きで一覧表示されます</p></li>
-        <li><div class="phone"><div class="screen"><img src="./img/app/cancel-where.jpg" alt="入った場所を選ぶ画面" loading="lazy" width="750" height="1630"></div></div><h3>解約ページ</h3><p>加入経路を答えると、解約・変更のページが開きます</p></li>
-        <li><div class="phone"><div class="screen"><img src="./img/app/record.jpg" alt="記録の画面" loading="lazy" width="750" height="1630"></div></div><h3>記録</h3><p>先月との差額と、調整の履歴が残ります</p></li>
+        <li><span class="step-num" aria-hidden="true">1</span><div class="step-body"><h3>答える</h3><p>マイサブスクのカードで、使った回数を押して答えます</p></div><div class="phone"><div class="screen"><video src="./img/flow/flow1.mp4" poster="./img/flow/flow1.jpg" autoplay muted loop playsinline preload="metadata" aria-label="マイサブスクの、使った回数を聞くカード" width="420" height="914"></video></div></div></li>
+        <li><span class="step-num" aria-hidden="true">2</span><div class="step-body"><h3>提案</h3><p>他のプランや解約が、差額付きで一覧表示されます</p></div><div class="phone"><div class="screen"><video src="./img/flow/flow2.mp4" poster="./img/flow/flow2.jpg" autoplay muted loop playsinline preload="metadata" aria-label="TuneLab の詳細の見直す。安いプラン・ファミリープラン・解約" width="420" height="914"></video></div></div></li>
+        <li><span class="step-num" aria-hidden="true">3</span><div class="step-body"><h3>解約ページ</h3><p>加入経路を答えると、解約・変更のページが開きます</p></div><div class="phone"><div class="screen"><video src="./img/flow/flow3.mp4" poster="./img/flow/flow3.jpg" autoplay muted loop playsinline preload="metadata" aria-label="入った場所を選ぶ画面" width="420" height="914"></video></div></div></li>
+        <li><span class="step-num" aria-hidden="true">4</span><div class="step-body"><h3>記録</h3><p>先月との差額と、調整の履歴が残ります</p></div><div class="phone"><div class="screen"><video src="./img/flow/flow4.mp4" poster="./img/flow/flow4.jpg" autoplay muted loop playsinline preload="metadata" aria-label="記録の画面" width="420" height="914"></video></div></div></li>
       </ol>
     </section>
 
@@ -284,15 +303,15 @@
         <div class="plus-grid">
           <article class="pf wide">
             <div class="pf-text"><b>予算で組み直す</b><span>予算を決めると、残したいサブスクは外さずに、予算内に収まる組み合わせが提案されます</span></div>
-            <div class="pf-shot"><img src="./img/app/rebuild-pinned.jpg" alt="予算で組み直す画面。残すサブスクと予算のつまみ" loading="lazy" width="750" height="1630"></div>
+            <div class="pf-shot"><div class="phone"><div class="screen"><img src="./img/app/rebuild-pinned.jpg" alt="予算で組み直す画面。残すサブスクと予算のつまみ" loading="lazy" width="750" height="1630"></div></div></div>
           </article>
           <article class="pf">
             <div class="pf-text"><b>値上げのお知らせ</b><span>公式の値段が変わると通知が届き、追加した値段も自動で更新されます</span></div>
-            <div class="pf-shot"><img src="./img/app/pricehistory.jpg" alt="値段の変更の一覧" loading="lazy" width="750" height="1630"></div>
+            <div class="pf-shot"><div class="phone"><div class="screen"><img src="./img/app/pricehistory.jpg" alt="値段の変更の一覧" loading="lazy" width="750" height="1630"></div></div></div>
           </article>
           <article class="pf">
             <div class="pf-text"><b>解約日のリマインド</b><span>解約日を決めると、前日に通知が届きます。当日には、解約できたかを確認する通知が届きます。</span></div>
-            <div class="pf-shot"><img src="./img/app/cancelplan.jpg" alt="解約の予定の設定" loading="lazy" width="750" height="1630"></div>
+            <div class="pf-shot"><div class="phone"><div class="screen"><img src="./img/app/cancelplan.jpg" alt="解約の予定の設定" loading="lazy" width="750" height="1630"></div></div></div>
           </article>
           <ul class="pf-small">
             <li><b>広告なし</b><span>アプリ内の広告が表示されなくなります</span></li>

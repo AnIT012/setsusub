@@ -32,14 +32,14 @@
     --green-ink: #3DDC79;
     --button-bg: #F3F3F1;
     --button-ink: #111111;
-    --bezel: #2B2B2D;
-    --bezel-edge: #3A3A3C;
+    --bezel: #3A3A3D;
+    --bezel-edge: rgba(255,255,255,.32);
   }
 }
 :root[data-theme="dark"] {
   --bg: #0E0E0E; --surface: #1A1A1B; --surface-2: #242425; --ink: #F3F3F1; --ink-2: #B2B2AD;
   --ink-3: #7E7E7A; --line: #2A2A2B; --green-ink: #3DDC79; --button-bg: #F3F3F1; --button-ink: #111111;
-  --bezel: #2B2B2D; --bezel-edge: #3A3A3C;
+  --bezel: #3A3A3D; --bezel-edge: rgba(255,255,255,.32);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
