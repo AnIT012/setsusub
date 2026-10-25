@@ -125,7 +125,7 @@
 @media (min-width: 960px) { .plus-data { gap: 16px; } .box { padding: 44px; } .box ul { grid-template-columns: repeat(3, 1fr); gap: 18px 24px; } }
 
 .final { position: relative; overflow: hidden; text-align: center; padding: 120px 0; }
-.final svg { position: absolute; left: 50%; top: 50%; width: 520px; height: 520px; transform: translate(-50%, -50%); opacity: .16; }
+.final .final-mark { left: 50%; top: 50%; width: 520px; transform: translate(-50%, -50%); opacity: .16; }
 .final h2 { position: relative; font-size: clamp(30px, 8vw, 56px); }
 .final p { position: relative; margin: 14px auto 0; color: var(--ink-2); max-width: 30em; }
 .final .cta { position: relative; margin-top: 28px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
@@ -164,6 +164,15 @@
   .pf { max-height: 520px; }
   .pf-small { grid-column: 1 / -1; grid-template-columns: repeat(3, 1fr); }
 }
+
+/* アプリのアイコンの欠片（RingMark と同じ位置）。112 の枠を、面いっぱいの大きさに */
+.ring-mark, .final-mark { position: absolute; aspect-ratio: 1; }
+.ring-mark { left: 50%; top: 50%; width: 640px; transform: translate(-50%, -50%) rotate(0deg); animation: mark-turn .9s cubic-bezier(.3,.35,.25,1) both; }
+.ring-mark img, .final-mark img { position: absolute; display: block; }
+.ring-mark img { animation: piece-in .8s cubic-bezier(.34,1.4,.64,1) both; animation-delay: var(--d); }
+@keyframes piece-in { from { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--r)) scale(.35); } }
+@keyframes mark-turn { from { transform: translate(-50%, -50%) rotate(-35deg); } }
+@media (prefers-reduced-motion: reduce) { .ring-mark, .ring-mark img { animation: none; } }
 </style>
 </head>
 <body>
@@ -191,13 +200,8 @@
       </div>
     </div>
     <div class="ring-stage">
-      <!-- アプリの輪のマークと同じ4色。読み込んだ瞬間に、ばらばらの4本が1つの輪に集まる（0.95秒） -->
-      <svg class="ring" viewBox="0 0 200 200" aria-hidden="true">
-        <circle class="arc" cx="100" cy="100" r="80" stroke="var(--blue)"   style="--rot: -88deg" stroke-dasharray="118 503"/>
-        <circle class="arc" cx="100" cy="100" r="80" stroke="var(--green)"  style="--rot: 2deg" stroke-dasharray="118 503"/>
-        <circle class="arc" cx="100" cy="100" r="80" stroke="var(--orange)" style="--rot: 92deg" stroke-dasharray="118 503"/>
-        <circle class="arc" cx="100" cy="100" r="80" stroke="var(--red)"    style="--rot: 182deg" stroke-dasharray="118 503"/>
-      </svg>
+      <!-- アプリのアイコンの4つの欠片そのもの。読み込んだ瞬間に、散った欠片が回りながら集まって輪になる（アプリの RingMark と同じ動き） -->
+      <div class="ring-mark" aria-hidden="true"><img src="./img/ring/Green.png" alt="" style="left:55.214%;top:0.759%;width:44.790%;height:81.379%;--dx:41.1%;--dy:-8.2%;--r:-60deg;--d:0.00s"><img src="./img/ring/Red.png" alt="" style="left:6.696%;top:65.000%;width:78.034%;height:35.000%;--dx:4.1%;--dy:41.1%;--r:-85deg;--d:0.07s"><img src="./img/ring/Blue.png" alt="" style="left:0.000%;top:8.554%;width:33.224%;height:61.788%;--dx:-41.1%;--dy:4.1%;--r:-110deg;--d:0.14s"><img src="./img/ring/Orange.png" alt="" style="left:26.527%;top:0.491%;width:19.298%;height:23.025%;--dx:-16.4%;--dy:-41.1%;--r:-135deg;--d:0.21s"></div>
       <div class="phone"><div class="screen">
         <video data-auto autoplay muted loop playsinline preload="auto" poster="./video/launch.jpg" aria-label="起動の画面の録画。4色の帯が輪になり、マイサブスクに移る"><source src="./video/launch.mp4" type="video/mp4"></video>
       </div></div>
@@ -314,12 +318,7 @@
   </div>
 
   <section class="final">
-    <svg viewBox="0 0 200 200" aria-hidden="true">
-      <circle cx="100" cy="100" r="80" fill="none" stroke-width="34" stroke="var(--blue)" stroke-dasharray="118 503" transform="rotate(-88 100 100)"/>
-      <circle cx="100" cy="100" r="80" fill="none" stroke-width="34" stroke="var(--green)" stroke-dasharray="118 503" transform="rotate(2 100 100)"/>
-      <circle cx="100" cy="100" r="80" fill="none" stroke-width="34" stroke="var(--orange)" stroke-dasharray="118 503" transform="rotate(92 100 100)"/>
-      <circle cx="100" cy="100" r="80" fill="none" stroke-width="34" stroke="var(--red)" stroke-dasharray="118 503" transform="rotate(182 100 100)"/>
-    </svg>
+    <div class="final-mark" aria-hidden="true"><img src="./img/ring/Green.png" alt="" style="left:55.214%;top:0.759%;width:44.790%;height:81.379%;"><img src="./img/ring/Red.png" alt="" style="left:6.696%;top:65.000%;width:78.034%;height:35.000%;"><img src="./img/ring/Blue.png" alt="" style="left:0.000%;top:8.554%;width:33.224%;height:61.788%;"><img src="./img/ring/Orange.png" alt="" style="left:26.527%;top:0.491%;width:19.298%;height:23.025%;"></div>
     <div class="wrap">
       <h2>次の引き落としの前に</h2>
       <p>1問に答えるところから始められます。登録はロゴを押すだけです。</p>
