@@ -1,3 +1,6 @@
+// 開き直した時に、前に見ていた位置（一番下など）へ飛ばない。いつも一番上から
+if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+if (!location.hash) { window.scrollTo(0, 0); }
 // 画面の録画：見えている間だけ流す。動きを減らす設定の人には止めた1枚（poster）と再生ボタンを出す
 (function () {
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;

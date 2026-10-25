@@ -125,7 +125,7 @@
 @media (min-width: 960px) { .plus-data { gap: 16px; } .box { padding: 44px; } .box ul { grid-template-columns: repeat(3, 1fr); gap: 18px 24px; } }
 
 .final { position: relative; overflow: hidden; text-align: center; padding: 120px 0; }
-.final .final-mark { left: 50%; top: 50%; width: 520px; transform: translate(-50%, -50%); opacity: .16; }
+.final .final-mark { left: 50%; top: 50%; width: 520px; height: 520px; transform: translate(-50%, -50%); opacity: .16; }
 .final h2 { position: relative; font-size: clamp(30px, 8vw, 56px); }
 .final p { position: relative; margin: 14px auto 0; color: var(--ink-2); max-width: 30em; }
 .final .cta { position: relative; margin-top: 28px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
@@ -165,14 +165,13 @@
   .pf-small { grid-column: 1 / -1; grid-template-columns: repeat(3, 1fr); }
 }
 
-/* アプリのアイコンの欠片（RingMark と同じ位置）。112 の枠を、面いっぱいの大きさに */
-.ring-mark, .final-mark { position: absolute; aspect-ratio: 1; }
-.ring-mark { left: 50%; top: 50%; width: 640px; transform: translate(-50%, -50%) rotate(0deg); animation: mark-turn .9s cubic-bezier(.3,.35,.25,1) both; }
-.ring-mark img, .final-mark img { position: absolute; display: block; }
-.ring-mark img { animation: piece-in .8s cubic-bezier(.34,1.4,.64,1) both; animation-delay: var(--d); }
-@keyframes piece-in { from { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(var(--r)) scale(.35); } }
+/* アプリのアイコンと同じ輪（ベクター）。読み込んだ瞬間に、散った欠片が回りながら集まる */
+.ring-mark, .final-mark { position: absolute; overflow: visible; }
+.ring-mark { left: 50%; top: 50%; width: 640px; height: 640px; transform: translate(-50%, -50%); animation: mark-turn .9s cubic-bezier(.3,.35,.25,1) both; }
+.ring-mark .piece { transform-box: view-box; transform-origin: 100px 100px; animation: piece-in .8s cubic-bezier(.34,1.3,.64,1) both; animation-delay: var(--d); }
+@keyframes piece-in { from { opacity: 0; transform: rotate(var(--r)) scale(.4); } }
 @keyframes mark-turn { from { transform: translate(-50%, -50%) rotate(-35deg); } }
-@media (prefers-reduced-motion: reduce) { .ring-mark, .ring-mark img { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .ring-mark, .ring-mark .piece { animation: none; } }
 </style>
 </head>
 <body>
@@ -201,7 +200,7 @@
     </div>
     <div class="ring-stage">
       <!-- アプリのアイコンの4つの欠片そのもの。読み込んだ瞬間に、散った欠片が回りながら集まって輪になる（アプリの RingMark と同じ動き） -->
-      <div class="ring-mark" aria-hidden="true"><img src="./img/ring/Green.png" alt="" style="left:55.214%;top:0.759%;width:44.790%;height:81.379%;--dx:41.1%;--dy:-8.2%;--r:-60deg;--d:0.00s"><img src="./img/ring/Red.png" alt="" style="left:6.696%;top:65.000%;width:78.034%;height:35.000%;--dx:4.1%;--dy:41.1%;--r:-85deg;--d:0.07s"><img src="./img/ring/Blue.png" alt="" style="left:0.000%;top:8.554%;width:33.224%;height:61.788%;--dx:-41.1%;--dy:4.1%;--r:-110deg;--d:0.14s"><img src="./img/ring/Orange.png" alt="" style="left:26.527%;top:0.491%;width:19.298%;height:23.025%;--dx:-16.4%;--dy:-41.1%;--r:-135deg;--d:0.21s"></div>
+      <svg class="ring-mark" viewBox="0 0 200 200" aria-hidden="true"><defs><linearGradient id="ring-mark-g" gradientUnits="userSpaceOnUse" x1="130" y1="20" x2="170" y2="170"><stop offset="0" stop-color="#3BE6A0"/><stop offset="1" stop-color="#12A05F"/></linearGradient><linearGradient id="ring-mark-r" gradientUnits="userSpaceOnUse" x1="40" y1="140" x2="170" y2="190"><stop offset="0" stop-color="#D4143C"/><stop offset="1" stop-color="#FF6F8E"/></linearGradient><linearGradient id="ring-mark-b" gradientUnits="userSpaceOnUse" x1="60" y1="30" x2="40" y2="150"><stop offset="0" stop-color="#2347D6"/><stop offset="1" stop-color="#7FA8FF"/></linearGradient><linearGradient id="ring-mark-o" gradientUnits="userSpaceOnUse" x1="90" y1="10" x2="110" y2="40"><stop offset="0" stop-color="#FFC94A"/><stop offset="1" stop-color="#F59E0B"/></linearGradient></defs><path d="M111.13 20.78 A80 80 0 0 1 151.42 161.28" fill="none" stroke="url(#ring-mark-g)" stroke-width="34" stroke-linecap="butt" class="piece" style="--len:184.3;--d:0.00s;--r:-60deg"/><path d="M140.00 169.28 A80 80 0 0 1 25.83 129.97" fill="none" stroke="url(#ring-mark-r)" stroke-width="34" stroke-linecap="butt" class="piece" style="--len:136.8;--d:0.07s;--r:-85deg"/><path d="M22.38 119.35 A80 80 0 0 1 66.19 27.50" fill="none" stroke="url(#ring-mark-b)" stroke-width="34" stroke-linecap="butt" class="piece" style="--len:110.3;--d:0.14s;--r:-110deg"/><path d="M73.95 24.36 A80 80 0 0 1 94.42 20.19" fill="none" stroke="url(#ring-mark-o)" stroke-width="34" stroke-linecap="butt" class="piece" style="--len:20.9;--d:0.21s;--r:-135deg"/></svg>
       <div class="phone"><div class="screen">
         <video data-auto autoplay muted loop playsinline preload="auto" poster="./video/launch.jpg" aria-label="起動の画面の録画。4色の帯が輪になり、マイサブスクに移る"><source src="./video/launch.mp4" type="video/mp4"></video>
       </div></div>
@@ -318,7 +317,7 @@
   </div>
 
   <section class="final">
-    <div class="final-mark" aria-hidden="true"><img src="./img/ring/Green.png" alt="" style="left:55.214%;top:0.759%;width:44.790%;height:81.379%;"><img src="./img/ring/Red.png" alt="" style="left:6.696%;top:65.000%;width:78.034%;height:35.000%;"><img src="./img/ring/Blue.png" alt="" style="left:0.000%;top:8.554%;width:33.224%;height:61.788%;"><img src="./img/ring/Orange.png" alt="" style="left:26.527%;top:0.491%;width:19.298%;height:23.025%;"></div>
+    <svg class="final-mark" viewBox="0 0 200 200" aria-hidden="true"><defs><linearGradient id="final-mark-g" gradientUnits="userSpaceOnUse" x1="130" y1="20" x2="170" y2="170"><stop offset="0" stop-color="#3BE6A0"/><stop offset="1" stop-color="#12A05F"/></linearGradient><linearGradient id="final-mark-r" gradientUnits="userSpaceOnUse" x1="40" y1="140" x2="170" y2="190"><stop offset="0" stop-color="#D4143C"/><stop offset="1" stop-color="#FF6F8E"/></linearGradient><linearGradient id="final-mark-b" gradientUnits="userSpaceOnUse" x1="60" y1="30" x2="40" y2="150"><stop offset="0" stop-color="#2347D6"/><stop offset="1" stop-color="#7FA8FF"/></linearGradient><linearGradient id="final-mark-o" gradientUnits="userSpaceOnUse" x1="90" y1="10" x2="110" y2="40"><stop offset="0" stop-color="#FFC94A"/><stop offset="1" stop-color="#F59E0B"/></linearGradient></defs><path d="M111.13 20.78 A80 80 0 0 1 151.42 161.28" fill="none" stroke="url(#final-mark-g)" stroke-width="34" stroke-linecap="butt"/><path d="M140.00 169.28 A80 80 0 0 1 25.83 129.97" fill="none" stroke="url(#final-mark-r)" stroke-width="34" stroke-linecap="butt"/><path d="M22.38 119.35 A80 80 0 0 1 66.19 27.50" fill="none" stroke="url(#final-mark-b)" stroke-width="34" stroke-linecap="butt"/><path d="M73.95 24.36 A80 80 0 0 1 94.42 20.19" fill="none" stroke="url(#final-mark-o)" stroke-width="34" stroke-linecap="butt"/></svg>
     <div class="wrap">
       <h2>次の引き落としの前に</h2>
       <p>1問に答えるところから始められます。登録はロゴを押すだけです。</p>
