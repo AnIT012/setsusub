@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>セツサブ - サブスク見直し</title>
 <meta name="description" content="使った回数を1回だけ聞き、学生プランやファミリープランへの変更と、解約のページまで案内するアプリです。">
+<!-- リンクを X・LINE などに貼った時の絵と文（絵は絶対 URL でないと出ない） -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="セツサブ">
+<meta property="og:title" content="セツサブ - 払う前の、サブスク見直し">
+<meta property="og:description" content="使った回数を1回だけ聞き、学生プランやファミリープランへの変更と、解約のページまで案内するアプリです。">
+<meta property="og:url" content="https://anit012.github.io/setsusub/">
+<meta property="og:image" content="https://anit012.github.io/setsusub/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="629">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="./img/icon.png">
 <link rel="apple-touch-icon" href="./img/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,7 +45,8 @@
   .hero { min-height: 760px; padding-top: 40px; }
   .hero .wrap { display: grid; grid-template-columns: minmax(0, 560px) 1fr; }
   .hero-text { padding-top: 72px; max-width: 520px; }
-  .ring-stage { position: absolute; right: -230px; top: -6px; width: 900px; height: 860px; margin: 0; z-index: 0; }
+  /* 輪と電話は、文の列（中央 1120px）に付いて動く。画面の右の端に付けると、広い画面で間が空く（1920px で電話だけ右へ飛んだ） */
+  .ring-stage { position: absolute; left: calc(50% + min(50vw - 220px, 480px) - 450px); top: -6px; width: 900px; height: 860px; margin: 0; z-index: 0; }
   .ring-stage svg.ring { width: 860px; height: 860px; }
   .ring-stage .phone { --w: 300px; }
   .ring-cap { bottom: 24px; }
@@ -211,10 +222,10 @@
     <div class="wrap">
       <div class="hero-text">
         <h1>払う前の、<br><span class="nw">サブスク</span><wbr><span class="nw">見直し</span></h1>
-        <p class="lead">使った回数に答えるだけで、合うプランと解約のページまで案内します。</p>
+        <p class="lead"><span class="nw">使った回数に答えるだけで、</span><wbr><span class="nw">合うプランと</span><wbr><span class="nw">解約のページまで</span><wbr><span class="nw">案内します。</span></p>
         <div class="cta">
           <!-- TODO: App Store の URL が決まったら href を差し替える -->
-          <a class="button" href="#">App Store で入手</a>
+          <a class="button" href="https://apps.apple.com/jp/app/id6826775720">App Store で入手</a>
           <span class="cta-note">iPhone 向け・無料（広告あり）</span>
         </div>
       </div>
@@ -285,7 +296,7 @@
       <p>1問に答えるだけで始められます。サブスクの追加は、ロゴを押すだけです。</p>
       <div class="cta">
         <!-- TODO: App Store の URL が決まったら href を差し替える -->
-        <a class="button" href="#">App Store で入手</a>
+        <a class="button" href="https://apps.apple.com/jp/app/id6826775720">App Store で入手</a>
         <span class="cta-note">iPhone 向け・無料（広告あり）・Plus は買い切り ¥160</span>
       </div>
     </div>
